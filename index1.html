@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Admin Page</title>
+</head>
+
+<body>
+    <header class="index1Header">
+        <div class="left-header">
+            <h1>Admin Products List</h1>
+        </div>
+        <div class="right-header">
+            <div>
+                <button id="addProductButton">Add Products</button>
+            </div>
+            <form action="">
+                <input type="search" placeholder="Search">
+                <button>search</button>
+            </form>
+        </div>
+        
+    </header>
+
+    <div class="addFormDiv">
+        <form action="" id="addNewProduct">
+            <label for="">Product Name:</label>
+            <input type="text" placeholder="Name">
+            <label for="">Product Description:</label>
+            <input type="text" placeholder="Description">
+            <label for="">Price:</label>
+            <input type="number" placeholder="Price">
+            <label for="">Product url:</label>
+            <input type="url" placeholder="url">
+
+            <div id="form-buttons">
+                <button id="addButton">Add</button>
+                <button id="cancel">Cancel</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="updateFormDiv">
+        <form action="" id="updateProduct">
+            <label for="">Product Name:</label>
+            <input type="text" placeholder="Name">
+            <label for="">Product Description:</label>
+            <input type="text" placeholder="Description">
+            <label for="">Price:</label>
+            <input type="number" placeholder="Price">
+            <label for="">Product url:</label>
+            <input type="url" placeholder="url">
+    
+            <div id="form-buttons">
+                <button id="updateButton">update</button>
+                <button id="cancel">Cancel</button>
+            </div>
+        </form>
+    </div>
+
+    <div id="container">
+        <div>
+            <table id="productList">
+                <thead>
+                    <th>Product Id</th>
+                    <th>Product Name</th>
+                    <th>Product Description</th>
+                    <th>Product Price</th>
+                    <th>Product Images</th>
+                    <th>Options</th>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+    <script src="module1.js"></script>
+</body>
+
+</html>
