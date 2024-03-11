@@ -1,5 +1,9 @@
 document.addEventListener('DOMContentLoaded', async () => {
     fetchProducts();
+
+    const count = document.getElementById('items-count');
+    count.textContent = '0';
+    displayCartItems();    
 });
 
 
@@ -46,5 +50,32 @@ async function fetchProducts() {
       addToCart(productId);
     });
   });
+
+  
 }
 
+const cartItems = [];
+
+async function addToCart(productId) {
+    const response = await fetch(`https://ui-training-c9af3-default-rtdb.firebaseio.com/product/${productId}.json`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    });
+    if (!response.ok) {
+      throw new Error('Failed to fetch product data');
+    }
+
+    const data = await response.json();
+    cartItems.push(data);    
+    const count = document.getElementById('items-count');
+    count.textContent = cartItems.length.toString();
+}
+
+async function displayCartItems() {
+    document.getElementById('cart-items').addEventListener('click', async () => {
+        console.log(cartItems);
+    });
+    
+}
