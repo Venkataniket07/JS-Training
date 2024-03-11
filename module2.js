@@ -57,25 +57,43 @@ async function fetchProducts() {
 const cartItems = [];
 
 async function addToCart(productId) {
-    const response = await fetch(`https://ui-training-c9af3-default-rtdb.firebaseio.com/product/${productId}.json`, {
-        method: 'GET',
+  const existingProductIndex = cartItems.findIndex(
+    (item) => item.productId === productId
+  );
+
+  if (existingProductIndex !== -1) {
+    // If the product already exists in the cart, increment its quantity
+    cartItems[existingProductIndex].quantity++;
+  } else {
+    // If the product doesn't exist in the cart, fetch its data and add it to the cart
+    const response = await fetch(
+      `https://ui-training-c9af3-default-rtdb.firebaseio.com/product/${productId}.json`,
+      {
+        method: "GET",
         headers: {
-            'Content-Type': 'application/json',
-        }
-    });
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
     if (!response.ok) {
-      throw new Error('Failed to fetch product data');
+      throw new Error("Failed to fetch product data");
     }
 
     const data = await response.json();
-    cartItems.push(data);    
-    const count = document.getElementById('items-count');
-    count.textContent = cartItems.length.toString();
+    data['productId'] = productId;
+    data['quantity'] = 1; // Initialize quantity to 1
+    cartItems.push(data);
+  }
+
+  const count = document.getElementById("items-count");
+  count.textContent = cartItems.length.toString(); // Update cart count
 }
+
 
 async function displayCartItems() {
     document.getElementById('cart-items').addEventListener('click', async () => {
         console.log(cartItems);
     });
-    
+
 }
