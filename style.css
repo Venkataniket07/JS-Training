@@ -199,3 +199,25 @@ tr:last-child {
     border: none;
     color: whitesmoke;
 }
+
+#productsList {
+    padding: 20px;
+    list-style: none;
+}
+
+.product-item {
+    width: 80%;
+    margin: auto;
+    display: flex;
+    padding: 20px;
+}
+
+.product-image {
+    max-height: 200px;
+    max-width: 300px;
+    border-radius: 5px;
+}
+
+.product-details {
+    padding: 20px;
+}
