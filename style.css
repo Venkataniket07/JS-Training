@@ -152,6 +152,11 @@ tr:last-child {
     align-items: center;
 }
 
+button > a {
+    text-decoration: none;
+    color: black;
+}
+
 .index2Header {
     display: flex;
     align-items: center;
