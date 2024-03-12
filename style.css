@@ -243,3 +243,45 @@ tr:last-child {
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     font-weight: 550;
 }
+
+#cartItemsDisplay {
+    width: 60%;
+    margin: 20px auto;
+    display: none;
+}
+
+#cartItemsDisplay > div > ul {
+    list-style: none;
+}
+
+#cartValueDiv {
+    text-align: center;
+    padding: 20px;
+}
+
+#cartValueDiv > h3 {
+    font-weight: 600;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.empty-cart-message {
+    font-size: 18px;
+    text-align: center;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-weight: 600;
+    padding: 20px;
+}
+
+.cartDivOptions {
+    width: 50%;
+    margin: auto;
+    text-align: right;
+}
+
+.cartDivOptions button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 10px;
+    background-color: #F3A847;
+    font-weight: 600;
+}
