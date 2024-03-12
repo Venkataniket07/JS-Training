@@ -30,7 +30,7 @@ async function fetchProducts() {
   if (products && typeof products === 'object') {
     for (let [key, product] of Object.entries(products)) {
       productList += `
-        <li >
+        <li>
           <div class="product-item">
           <div class = "product-image-div"><img src="${product.image}" alt="${product.name}" class="product-image"></div>
           <div class="product-details">
