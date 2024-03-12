@@ -26,6 +26,22 @@
     justify-content: space-around;
 }
 
+#search-product-input {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 15px;
+}
+
+#search-button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 15px;
+    background-color: #F3A847;
+    font-weight: 600;
+    font-size: 14px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
 .index1Header h1 {
     text-align: right;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
@@ -155,6 +171,7 @@ tr:last-child {
 button > a {
     text-decoration: none;
     color: black;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
 .index2Header {
@@ -173,10 +190,21 @@ button > a {
     text-align: center;
 }
 
+.secondHeader > form {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
 .secondHeader input {
     width: 80%;
-    padding: 10px 0px;
-    border-radius: 20px;
+    padding: 10px 10px;
+    border-radius: 15px;
+    border: none;
+}
+
+.secondHeader input::placeholder {
+    padding: 0px 5px;
 }
 
 .secondHeader button {

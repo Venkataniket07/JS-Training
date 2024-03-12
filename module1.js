@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     fetchProducts();
     deleteProduct();
     update();
+    searchProducts();
 });
 
 const baseUrl = `https://ui-training-c9af3-default-rtdb.firebaseio.com/product.json`;
@@ -16,22 +17,19 @@ async function addNewProduct() {
     document.getElementById('addButton').addEventListener('click', async (event) => {
     event.preventDefault();
 
-    // Fetch form values
     const productName = document.querySelector('input[type="text"][placeholder="Name"]').value;
     const productDescription = document.querySelector('input[type="text"][placeholder="Description"]').value;
     const productPrice = document.querySelector('input[type="number"][placeholder="Price"]').value;
     const productUrl = document.querySelector('input[type="url"][placeholder="url"]').value;
 
-    // Create postData object
     const postData = {
         name: productName,
         description: productDescription,
         image: productUrl,
-        price: parseInt(productPrice) // Convert price to integer
+        price: parseInt(productPrice)
     };
 
     try {
-        // Send POST request to Firebase
         const response = await fetch(`https://ui-training-c9af3-default-rtdb.firebaseio.com/product.json`, {
             method: 'POST',
             headers: {
@@ -47,7 +45,6 @@ async function addNewProduct() {
         const data = await response.json();
         console.log('Product added successfully:', data);
 
-        // Optionally, reset the form after successful submission
         document.getElementById('addNewProduct').reset();
     } catch (error) {
         console.error('Error adding product:', error);
@@ -74,7 +71,6 @@ async function fetchProducts() {
  
   let tableRows = '';
  
-  // Check if posts is not empty and is an object
   if (products && typeof products === 'object') {
       for (let [key, product] of Object.entries(products)) {
           tableRows +=
@@ -136,12 +132,11 @@ async function update() {
             document.getElementById('container').style.display = 'none';
             document.querySelector('.updateFormDiv').style.display = 'block';
             
-            // Find the product ID from the row
             const productId = target.closest('tr').querySelector('.productId').textContent;
 
             const updateButton = document.getElementById('updateButton');
             updateButton.addEventListener('click', async (event) => {
-                event.preventDefault(); // Prevent the default form submission behavior
+                event.preventDefault();
                 const productName = document.querySelector('.updateFormDiv input[type="text"][placeholder="Name"]').value;
                 const productDescription = document.querySelector('.updateFormDiv input[type="text"][placeholder="Description"]').value;
                 const productPrice = document.querySelector('.updateFormDiv input[type="number"][placeholder="Price"]').value;
@@ -175,8 +170,34 @@ async function update() {
 
                 document.querySelector('.updateFormDiv').style.display = 'none';
                 document.getElementById('container').style.display = 'block';
-                fetchProducts(); // Refresh the product list after update
+                fetchProducts();
             });
         }
+    });
+}
+
+async function searchProducts() {
+    document.querySelector('.search-product-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        let searchText = document.getElementById('search-product-input').value.toLowerCase();
+
+        const itemList = document.querySelector('#productList tbody');
+        
+        let items = itemList.getElementsByTagName('tr');
+        items = Array.from(items);
+
+        items.forEach((trItem) => {
+          let productName = trItem.children[1].textContent.toLowerCase();
+          let productDescription = trItem.children[2].textContent.toLowerCase();
+
+          if (
+            productName.includes(searchText) ||
+            productDescription.includes(searchText)
+          ) {
+            trItem.style.display = "table-row";
+          } else {
+            trItem.style.display = "none";
+          }
+        });
     });
 }

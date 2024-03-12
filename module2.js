@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     closeCart();
     clearCartItems();
+    searchProducts();
 });
 
 
@@ -26,7 +27,6 @@ async function fetchProducts() {
 
   let productList = '';
 
-  // Check if products is not empty and is an object
   if (products && typeof products === 'object') {
     for (let [key, product] of Object.entries(products)) {
       productList += `
@@ -47,11 +47,10 @@ async function fetchProducts() {
 
   document.getElementById('productsList').innerHTML = productList;
 
-  // Add event listeners to the "Add to Cart" buttons
+
   document.querySelectorAll('.add-to-cart-button').forEach(button => {
     button.addEventListener('click', () => {
       const productId = button.getAttribute('data-product-id');
-      // Call a function to add the product to the cart using the productId
       addToCart(productId);
     });
   });
@@ -67,10 +66,10 @@ async function addToCart(productId) {
   );
 
   if (existingProductIndex !== -1) {
-    // If the product already exists in the cart, increment its quantity
+    
     cartItems[existingProductIndex].quantity++;
   } else {
-    // If the product doesn't exist in the cart, fetch its data and add it to the cart
+
     const response = await fetch(
       `https://ui-training-c9af3-default-rtdb.firebaseio.com/product/${productId}.json`,
       {
@@ -87,12 +86,12 @@ async function addToCart(productId) {
 
     const data = await response.json();
     data['productId'] = productId;
-    data['quantity'] = 1; // Initialize quantity to 1
+    data['quantity'] = 1;
     cartItems.push(data);
   }
 
   const count = document.getElementById("items-count");
-  count.textContent = cartItems.length.toString(); // Update cart count
+  count.textContent = cartItems.length.toString();
 }
 
 async function displayCartItems() {
@@ -101,8 +100,7 @@ async function displayCartItems() {
   const cartItemsDisplay = document.getElementById('cartItemsDisplay');
 
   cartItemsList.innerHTML = "";
-  let totalCartPrice = 0; // Initialize total cart price outside the if block
-
+  let totalCartPrice = 0;
   if (cartItems && cartItems.length > 0) {
     cartItemsDisplay.style.display = 'block';
     cartItems.forEach((item) => {
@@ -164,7 +162,6 @@ async function displayCartItems() {
     document.getElementById("cartValueDiv").style.display = "none";
   }
 
-  // Update the total cart price
   totalCartPriceElement.textContent = "$ " + totalCartPrice.toFixed(2) + "/-";
 }
 
@@ -181,5 +178,37 @@ async function clearCartItems() {
       console.log(cartItems);
       document.getElementById("cartItemsDisplay").style.display = "none";
       document.getElementById("items-count").textContent = 0;
+    });
+}
+
+async function searchProducts() {
+  document
+    .querySelector(".search-product-form")
+    .addEventListener("submit", (e) => {
+      e.preventDefault();
+      let searchText = document
+        .getElementById("search-product-input2")
+        .value.toLowerCase();
+
+      const productList = document.querySelector("#productsList");
+
+      let products = productList.getElementsByTagName("li");
+      products = Array.from(products);
+
+      products.forEach((liItem) => {
+        let productName = liItem.querySelector("h3").textContent.toLowerCase();
+        let productDescription = liItem
+          .querySelector("p")
+          .textContent.toLowerCase();
+
+        if (
+          productName.includes(searchText) ||
+          productDescription.includes(searchText)
+        ) {
+          liItem.style.display = "block";
+        } else {
+          liItem.style.display = "none";
+        }
+      });
     });
 }
