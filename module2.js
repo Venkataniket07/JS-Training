@@ -54,8 +54,6 @@ async function fetchProducts() {
       addToCart(productId);
     });
   });
-
-  
 }
 
 const cartItems = [];

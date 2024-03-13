@@ -253,6 +253,7 @@ button > a {
 }
 
 .product-details {
+    flex: 1;
     padding: 20px;
 }
 
@@ -266,7 +267,7 @@ button > a {
 .product-details > p {
     font-size: 15px;
     padding: 5px 10px;
-    text-transform: uppercase;
+    text-transform: capitalize;
 }
 
 .add-to-cart-button {
@@ -280,6 +281,7 @@ button > a {
 
 .product-image-div {
     width: 40%;
+    flex-shrink: 0;
 }
 
 #items-count {
