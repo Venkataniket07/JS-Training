@@ -48,6 +48,7 @@ async function fetchProducts() {
   document.getElementById('productsList').innerHTML = productList;
 
 
+  // Adding product to cart
   document.querySelectorAll('.add-to-cart-button').forEach(button => {
     button.addEventListener('click', () => {
       const productId = button.getAttribute('data-product-id');
@@ -182,7 +183,7 @@ async function clearCartItems() {
 async function searchProducts() {
   document
     .querySelector(".search-product-form")
-    .addEventListener("submit", (e) => {
+    .addEventListener("keyup", (e) => {
       e.preventDefault();
       let searchText = document
         .getElementById("search-product-input2")

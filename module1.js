@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', async () => {
     addNewProduct();
     fetchProducts();
-    deleteProduct();
     searchProducts();
 });
 
@@ -81,7 +80,7 @@ async function fetchProducts() {
                   <td>${product.image}</td>
                   <td class = "buttonRow">
                       <button class="update_button" product-id = "${key}">Update</button>
-                      <button class="delete_button">Delete</button>
+                      <button class="delete_button" product-id = "${key}">Delete</button>
                   </td>
               </tr>`;
       }
@@ -89,6 +88,7 @@ async function fetchProducts() {
  
   tablebodyElement.innerHTML = tableRows;
 
+  // Update functionality
   document.querySelectorAll('.update_button').forEach(button => {
     button.addEventListener('click', () => {
         const productId = button.getAttribute('product-id');
@@ -97,34 +97,37 @@ async function fetchProducts() {
         }
     });
   });
+
+  // Delete functionality
+  document.querySelectorAll(".delete_button").forEach((button) => {
+    button.addEventListener("click", () => {
+      var productId = button.getAttribute("product-id");
+      deleteProduct(productId);
+    });
+  });
 }
 
-async function deleteProduct() {
-    document.getElementById('productList').addEventListener('click', async (e) => {
-    let target = e.target;
+async function deleteProduct(productId) {
 
-    if( target.classList.contains('delete_button')) {
-        const productId = target.parentElement.parentElement.querySelector('.productId').textContent;
-        const product = target.parentElement.parentElement;
-        console.log(productId);
-        const response = await fetch(`https://ui-training-c9af3-default-rtdb.firebaseio.com/product/${productId}.json`, {
-            method: 'delete',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        });
+    console.log(productId);
+    const response = await fetch(
+      `https://ui-training-c9af3-default-rtdb.firebaseio.com/product/${productId}.json`,
+      {
+        method: "delete",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
 
-        if (response.ok) {
-            console.log('Successfuly deleted: ', response);
-            product.remove();
-        }
+    if (response.ok) {
+      console.log("Successfuly deleted: ", response);
     }
     fetchProducts();
-});
 }
 
 async function closeDiv(div) {
@@ -208,7 +211,7 @@ async function updateProduct(productId) {
 }
 
 async function searchProducts() {
-    document.querySelector('.search-product-form').addEventListener('submit', (e) => {
+    document.querySelector('.search-product-form').addEventListener('keyup', (e) => {
         e.preventDefault();
         let searchText = document.getElementById('search-product-input').value.toLowerCase();
 
