@@ -226,6 +226,7 @@ button > a {
 }
 
 .thirdHeader > button {
+    position: relative;
     padding: 10px;
     margin-right: 20px;
     background-color: #131921;
@@ -288,8 +289,8 @@ button > a {
     border-radius: 100%;
     padding: 0px 3px;
     font-weight: 600;
-    right: 5.2%;
-    top: 1.5%;
+    right: 2.8%;
+    top: 1.6%;
     font-size: 15px;
 }
 
