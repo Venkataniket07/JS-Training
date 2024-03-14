@@ -344,3 +344,28 @@ button > a {
     background-color: #F3A847;
     font-weight: 600;
 }
+
+.quantity-controls {
+    display: flex;
+    padding: 10px;
+    align-items: center;
+}
+
+.quantity-controls button {
+    padding: 2px 8px;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    border: none;
+    border-radius: 50%;
+    background-color: #F3A847;
+    margin: 0px 10px;
+}
+
+.remove-cart-item {
+    padding: 5px 10px;
+    margin: 5px 20px;
+    border: none;
+    border-radius: 15px;
+    background-color: #F3A847;
+}

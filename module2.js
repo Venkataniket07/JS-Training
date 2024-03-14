@@ -1,33 +1,32 @@
-document.addEventListener('DOMContentLoaded', async () => {
-    fetchProducts();
+document.addEventListener("DOMContentLoaded", async () => {
+  fetchProducts();
 
-    const count = document.getElementById('items-count');
-    count.textContent = '0';
-    document.getElementById('cart-items').addEventListener('click', () => {
-      displayCartItems();
-    });
+  const count = document.getElementById("items-count");
+  count.textContent = "0";
+  document.getElementById("cart-items").addEventListener("click", () => {
+    displayCartItems();
+  });
 
-    closeCart();
-    clearCartItems();
-    searchProducts();
+  closeCart();
+  clearCartItems();
+  searchProducts();
 });
-
 
 const baseUrl = `https://ui-training-c9af3-default-rtdb.firebaseio.com/product.json`;
 
 async function fetchProducts() {
   const response = await fetch(baseUrl, {
-    method: 'GET',
+    method: "GET",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
   });
 
   const products = await response.json();
 
-  let productList = '';
+  let productList = "";
 
-  if (products && typeof products === 'object') {
+  if (products && typeof products === "object") {
     for (let [key, product] of Object.entries(products)) {
       productList += `
         <li>
@@ -45,30 +44,27 @@ async function fetchProducts() {
     }
   }
 
-  document.getElementById('productsList').innerHTML = productList;
-
+  document.getElementById("productsList").innerHTML = productList;
 
   // Adding product to cart
-  document.querySelectorAll('.add-to-cart-button').forEach(button => {
-    button.addEventListener('click', () => {
-      const productId = button.getAttribute('data-product-id');
+  document.querySelectorAll(".add-to-cart-button").forEach((button) => {
+    button.addEventListener("click", () => {
+      const productId = button.getAttribute("data-product-id");
       addToCart(productId);
     });
   });
 }
 
-const cartItems = [];
+var cartItems = [];
+
+function existingProductIndex(productId) {
+  return cartItems.findIndex((item) => item.productId === productId);
+}
 
 async function addToCart(productId) {
-  const existingProductIndex = cartItems.findIndex(
-    (item) => item.productId === productId
-  );
-
-  if (existingProductIndex !== -1) {
-    
-    cartItems[existingProductIndex].quantity++;
+  if (existingProductIndex(productId) !== -1) {
+    cartItems[existingProductIndex(productId)].quantity++;
   } else {
-
     const response = await fetch(
       `https://ui-training-c9af3-default-rtdb.firebaseio.com/product/${productId}.json`,
       {
@@ -84,8 +80,8 @@ async function addToCart(productId) {
     }
 
     const data = await response.json();
-    data['productId'] = productId;
-    data['quantity'] = 1;
+    data["productId"] = productId;
+    data["quantity"] = 1;
     cartItems.push(data);
   }
 
@@ -99,7 +95,6 @@ async function displayCartItems() {
   const cartItemsDisplay = document.getElementById("cartItemsDisplay");
 
   cartItemsList.innerHTML = "";
-  let totalCartPrice = 0;
   if (cartItems && cartItems.length > 0) {
     cartItemsDisplay.style.display = "block";
     cartItems.forEach((item) => {
@@ -113,17 +108,59 @@ async function displayCartItems() {
               <h3>${item.name}</h3>
               <p>${item.description}</p>
               <p>Price: $${item.price}</p>
-              <p>Quantity: ${item.quantity}</p>
+              <div class="quantity-controls">
+                <button class="quantity-button minus" data-product-id="${item.id}">-</button>
+                <p class="quantity">${item.quantity}</p>
+                <button class="quantity-button plus" data-product-id="${item.id}">+</button>
+              </div>
+              <button class="remove-cart-item" data-product-id="${item.id}">Remove</button>
             </div>
           </div>
         </li>
       `;
       cartItemsList.innerHTML += listItemHtml;
-      totalCartPrice += item.price * item.quantity;
     });
 
     document.getElementById("cartValueDiv").style.display = "block";
     document.getElementById("clear").style.display = "inline-block";
+    function handlePlusButtonClick(button) {
+      button.addEventListener("click", () => {
+        const productId = button.getAttribute("data-product-id");
+        const cartItem = cartItems.find((item) => item.id === productId);
+        if (cartItem) {
+          cartItem.quantity++;
+          displayCartItems();
+        }
+      });
+    }
+
+    function handleMinusButtonClick(button) {
+      button.addEventListener("click", () => {
+        const productId = button.getAttribute("data-product-id");
+        const cartItem = cartItems.find((item) => item.id === productId);
+        if (cartItem && cartItem.quantity > 1) {
+          cartItem.quantity--;
+          displayCartItems();
+        }
+      });
+    }
+
+    function handleRemoveButtonClick(button) {
+      button.addEventListener("click", () => {
+        const productId = button.getAttribute("data-product-id");
+        cartItems = cartItems.filter((item) => item.id !== productId);
+        displayCartItems();
+      });
+    }
+
+    // Attach event listeners to plus, minus, and remove buttons
+    const plusButtons = document.querySelectorAll(".plus");
+    const minusButtons = document.querySelectorAll(".minus");
+    const removeButtons = document.querySelectorAll(".remove-cart-item");
+
+    plusButtons.forEach(handlePlusButtonClick);
+    minusButtons.forEach(handleMinusButtonClick);
+    removeButtons.forEach(handleRemoveButtonClick);
   } else {
     const emptyCartMessageHtml = `
       <li class="empty-cart-message">Your cart is empty.</li>
@@ -134,23 +171,32 @@ async function displayCartItems() {
     document.getElementById("cartValueDiv").style.display = "none";
   }
 
-  totalCartPriceElement.textContent = "$ " + totalCartPrice.toFixed(2) + "/-";
+  function calculateTotalPrice() {
+    let totalCartPrice = 0;
+    if (cartItems && cartItems.length > 0) {
+      cartItems.forEach((item) => {
+        totalCartPrice += item.price * item.quantity;
+      });
+    }
+    return totalCartPrice.toFixed(2);
+  }
+  totalCartPriceElement.textContent = "$ " + calculateTotalPrice() + "/-";
 }
 
 async function closeCart() {
-  const closeCartButton = document.getElementById('close');
-  closeCartButton.addEventListener('click', () => {
-    document.getElementById("cartItemsDisplay").style.display = 'none';
+  const closeCartButton = document.getElementById("close");
+  closeCartButton.addEventListener("click", () => {
+    document.getElementById("cartItemsDisplay").style.display = "none";
   });
 }
 
 async function clearCartItems() {
-    document.getElementById("clear").addEventListener('click', async () => {
-      cartItems.length = 0;
-      console.log(cartItems);
-      document.getElementById("cartItemsDisplay").style.display = "none";
-      document.getElementById("items-count").textContent = 0;
-    });
+  document.getElementById("clear").addEventListener("click", async () => {
+    cartItems.length = 0;
+    console.log(cartItems);
+    document.getElementById("cartItemsDisplay").style.display = "none";
+    document.getElementById("items-count").textContent = 0;
+  });
 }
 
 async function searchProducts() {
