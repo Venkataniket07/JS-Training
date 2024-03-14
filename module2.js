@@ -85,8 +85,7 @@ async function addToCart(productId) {
     cartItems.push(data);
   }
 
-  const count = document.getElementById("items-count");
-  count.textContent = cartItems.length.toString();
+  cartCount();
 }
 
 async function displayCartItems() {
@@ -109,11 +108,11 @@ async function displayCartItems() {
               <p>${item.description}</p>
               <p>Price: $${item.price}</p>
               <div class="quantity-controls">
-                <button class="quantity-button minus" data-product-id="${item.id}">-</button>
+                <button class="quantity-button minus" data-product-id="${item.productId}">-</button>
                 <p class="quantity">${item.quantity}</p>
-                <button class="quantity-button plus" data-product-id="${item.id}">+</button>
+                <button class="quantity-button plus" data-product-id="${item.productId}">+</button>
               </div>
-              <button class="remove-cart-item" data-product-id="${item.id}">Remove</button>
+              <button class="remove-cart-item" data-product-id="${item.productId}">Remove</button>
             </div>
           </div>
         </li>
@@ -123,44 +122,42 @@ async function displayCartItems() {
 
     document.getElementById("cartValueDiv").style.display = "block";
     document.getElementById("clear").style.display = "inline-block";
-    function handlePlusButtonClick(button) {
+
+    // Attach event listeners to plus and minus buttons
+    const plusButtons = document.querySelectorAll(".plus");
+    const minusButtons = document.querySelectorAll(".minus");
+    const removeButtons = document.querySelectorAll(".remove-cart-item");
+
+    plusButtons.forEach((button) => {
       button.addEventListener("click", () => {
         const productId = button.getAttribute("data-product-id");
-        const cartItem = cartItems.find((item) => item.id === productId);
+        const cartItem = cartItems[existingProductIndex(productId)];
         if (cartItem) {
           cartItem.quantity++;
           displayCartItems();
         }
       });
-    }
+    });
 
-    function handleMinusButtonClick(button) {
+    minusButtons.forEach((button) => {
       button.addEventListener("click", () => {
         const productId = button.getAttribute("data-product-id");
-        const cartItem = cartItems.find((item) => item.id === productId);
+        const cartItem = cartItems[existingProductIndex(productId)];
         if (cartItem && cartItem.quantity > 1) {
           cartItem.quantity--;
           displayCartItems();
         }
       });
-    }
+    });
 
-    function handleRemoveButtonClick(button) {
+    removeButtons.forEach((button) => {
       button.addEventListener("click", () => {
         const productId = button.getAttribute("data-product-id");
-        cartItems = cartItems.filter((item) => item.id !== productId);
-        displayCartItems();
+        cartItems = cartItems.filter((item) => item.productId !== productId);
+        displayCartItems(); // Re-render the cart items after removing
+        cartCount();
       });
-    }
-
-    // Attach event listeners to plus, minus, and remove buttons
-    const plusButtons = document.querySelectorAll(".plus");
-    const minusButtons = document.querySelectorAll(".minus");
-    const removeButtons = document.querySelectorAll(".remove-cart-item");
-
-    plusButtons.forEach(handlePlusButtonClick);
-    minusButtons.forEach(handleMinusButtonClick);
-    removeButtons.forEach(handleRemoveButtonClick);
+    });
   } else {
     const emptyCartMessageHtml = `
       <li class="empty-cart-message">Your cart is empty.</li>
@@ -190,10 +187,14 @@ async function closeCart() {
   });
 }
 
+function cartCount() {
+  const count = document.getElementById("items-count");
+  count.textContent = cartItems.length.toString();
+}
+
 async function clearCartItems() {
   document.getElementById("clear").addEventListener("click", async () => {
     cartItems.length = 0;
-    console.log(cartItems);
     document.getElementById("cartItemsDisplay").style.display = "none";
     document.getElementById("items-count").textContent = 0;
   });
