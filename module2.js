@@ -96,68 +96,41 @@ async function addToCart(productId) {
 async function displayCartItems() {
   const cartItemsList = document.querySelector(".cartItemsList");
   const totalCartPriceElement = document.getElementById("totalPrice");
-  const cartItemsDisplay = document.getElementById('cartItemsDisplay');
+  const cartItemsDisplay = document.getElementById("cartItemsDisplay");
 
   cartItemsList.innerHTML = "";
   let totalCartPrice = 0;
   if (cartItems && cartItems.length > 0) {
-    cartItemsDisplay.style.display = 'block';
+    cartItemsDisplay.style.display = "block";
     cartItems.forEach((item) => {
-      const listItem = document.createElement("li");
-      listItem.classList.add("cart-item");
-
-      const productItem = document.createElement("div");
-      productItem.classList.add("product-item");
-
-      const imageDiv = document.createElement("div");
-      imageDiv.classList.add("product-image-div");
-
-      const image = document.createElement("img");
-      image.src = item.image;
-      image.alt = item.name;
-      image.classList.add("product-image");
-
-      imageDiv.appendChild(image);
-
-      const productDetails = document.createElement("div");
-      productDetails.classList.add("product-details");
-
-      const productName = document.createElement("h3");
-      productName.textContent = item.name;
-
-      const productDescription = document.createElement("p");
-      productDescription.textContent = item.description;
-
-      const productPrice = document.createElement("p");
-      productPrice.textContent = `Price: $${item.price}`;
-
-      const productQuantity = document.createElement("p");
-      productQuantity.textContent = `Quantity: ${item.quantity}`;
-
-      productDetails.appendChild(productName);
-      productDetails.appendChild(productDescription);
-      productDetails.appendChild(productPrice);
-      productDetails.appendChild(productQuantity);
-
-      productItem.appendChild(imageDiv);
-      productItem.appendChild(productDetails);
-
-      listItem.appendChild(productItem);
-
-      cartItemsList.appendChild(listItem);
-
+      const listItemHtml = `
+        <li class="cart-item">
+          <div class="product-item">
+            <div class="product-image-div">
+              <img src="${item.image}" alt="${item.name}" class="product-image">
+            </div>
+            <div class="product-details">
+              <h3>${item.name}</h3>
+              <p>${item.description}</p>
+              <p>Price: $${item.price}</p>
+              <p>Quantity: ${item.quantity}</p>
+            </div>
+          </div>
+        </li>
+      `;
+      cartItemsList.innerHTML += listItemHtml;
       totalCartPrice += item.price * item.quantity;
     });
 
     document.getElementById("cartValueDiv").style.display = "block";
     document.getElementById("clear").style.display = "inline-block";
   } else {
-    const emptyCartMessage = document.createElement("li");
-    emptyCartMessage.classList.add("empty-cart-message");
-    emptyCartMessage.textContent = "Your cart is empty.";
-    cartItemsList.appendChild(emptyCartMessage);
+    const emptyCartMessageHtml = `
+      <li class="empty-cart-message">Your cart is empty.</li>
+    `;
+    cartItemsList.innerHTML += emptyCartMessageHtml;
     cartItemsDisplay.style.display = "block";
-    document.getElementById('clear').style.display = 'none';
+    document.getElementById("clear").style.display = "none";
     document.getElementById("cartValueDiv").style.display = "none";
   }
 
